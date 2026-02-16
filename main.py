@@ -2,6 +2,7 @@ import time
 from src.buttons import PokerState
 from src.vision import capture_and_identify
 from src.poker_math import calculate_win_rate
+from src.ui_driver import PokerHUD
 
 class TexasHoldemBot:
     def __init__(self):
@@ -11,6 +12,7 @@ class TexasHoldemBot:
         self.stages = ["PRE-FLOP", "FLOP", "TURN", "RIVER"]
         self.current_stage_idx = 0
         self.hardware = PokerState(self.on_capture, self.on_reset)
+        self.hud = PokerHUD()
 
     def on_capture(self, channel):
         if self.current_stage_idx >= len(self.stages):
@@ -38,10 +40,12 @@ class TexasHoldemBot:
         self.player_cards = []
         self.board = []
         self.current_stage_idx = 0
+        self.hud.show_reset()
         print("\n[RESET] New Hand. Capture your hole cards...")
 
     def output_results(self):
         win_rate = calculate_win_rate(self.player_cards, self.board)
+        self.hud.update(self.stages[self.current_stage_idx-1], self.player_cards, win_rate)
         print(f"--- {self.stages[self.current_stage_idx-1]} RESULTS ---")
         print(f"Your Hand: {self.player_cards}")
         print(f"Community: {self.board}")
