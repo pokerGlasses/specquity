@@ -1,0 +1,11 @@
+# Poker Glasses — Laptop compute server dependencies
+# Install with:  pip install -r requirements.txt
+
+fastapi
+uvicorn[standard]
+pydantic
+treys
+inference              # Roboflow inference SDK
+supervision
+opencv-python
+numpy
